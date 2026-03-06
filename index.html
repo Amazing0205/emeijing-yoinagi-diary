@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>鹅槑精 & Yoinagi 日常记录站</title>
     <style>
-        /* 全局蓝白风格 + 移动端适配 */
         :root {
             --primary: #4299e1;
             --bg: #fff;
@@ -27,7 +26,6 @@
             margin: 0 auto;
             font-size: 16px;
         }
-        /* 登录页样式 */
         .login-page {
             text-align: center;
             padding: 40px 0;
@@ -48,10 +46,6 @@
             width: 80%;
             max-width: 300px;
         }
-        .login-btn:hover {
-            opacity: 0.9;
-        }
-        /* 首页样式 */
         .home-page {
             display: none;
         }
@@ -59,7 +53,6 @@
             margin-bottom: 20px;
             font-size: 18px;
         }
-        /* 打卡模块 */
         .taiko-card {
             text-align: center;
             margin-bottom: 20px;
@@ -96,7 +89,6 @@
             margin: 8px 0;
             font-size: 14px;
         }
-        /* 功能按钮：响应式网格 */
         .btn-group {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -118,7 +110,6 @@
             align-items: center;
             justify-content: center;
         }
-        /* 二级页面样式 */
         .page {
             display: none;
         }
@@ -140,7 +131,6 @@
             font-size: 18px;
             margin-bottom: 15px;
         }
-        /* 发布页样式 */
         .publish-form {
             display: flex;
             flex-direction: column;
@@ -166,7 +156,6 @@
             cursor: pointer;
             width: 100%;
         }
-        /* 日历墙样式 */
         .calendar {
             width: 100%;
             margin: 0 auto;
@@ -176,8 +165,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 10px;
         }
         .calendar-nav-btn {
             background: var(--primary);
@@ -209,11 +196,6 @@
             background: var(--primary);
             color: white;
         }
-        .calendar p {
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        /* 打卡记录样式 */
         .record-item {
             background: var(--card-bg);
             border-radius: 8px;
@@ -222,23 +204,6 @@
             border-left: 4px solid var(--primary);
             font-size: 14px;
         }
-        /* 备份恢复页样式 */
-        .backup-btn, .restore-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 10px 0;
-            width: 100%;
-        }
-        #restoreFile {
-            width: 100%;
-            padding: 8px;
-        }
-        /* 日常详情模态框样式 */
         .modal {
             display: none;
             position: fixed;
@@ -295,7 +260,6 @@
             cursor: pointer;
             width: 100%;
         }
-        /* 大图预览模态框 */
         .img-preview-modal {
             display: none;
             position: fixed;
@@ -309,15 +273,10 @@
             align-items: center;
             padding: 20px;
         }
-        .img-preview-content {
-            max-width: 100%;
-            max-height: 90%;
-        }
         .img-preview-content img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            border-radius: 4px;
         }
         .img-preview-close {
             position: absolute;
@@ -326,15 +285,7 @@
             color: white;
             font-size: 30px;
             cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
         }
-        /* 加载提示 */
         .loading {
             display: none;
             text-align: center;
@@ -344,438 +295,405 @@
     </style>
 </head>
 <body>
-    <!-- 登录页 -->
-    <div class="login-page" id="loginPage">
-        <h1>🔵 鹅槑精 & Yoinagi 日常记录站 🔵</h1>
-        <div style="margin-top: 40px;">
-            <button class="login-btn" onclick="login('鹅槑精')">鹅槑精</button>
-            <button class="login-btn" onclick="login('Yoinagi')">Yoinagi</button>
-        </div>
-        <p style="margin-top: 20px; font-size: 14px;">点击昵称直接进入 · 无需密码</p>
+
+<div class="login-page" id="loginPage">
+    <h1>🔵 鹅槑精 & Yoinagi 日常记录站 🔵</h1>
+    <div style="margin-top: 40px;">
+        <button class="login-btn" onclick="login('鹅槑精')">鹅槑精</button>
+        <button class="login-btn" onclick="login('Yoinagi')">Yoinagi</button>
     </div>
+    <p style="margin-top: 20px; font-size: 14px;">点击昵称直接进入 · 无需密码</p>
+</div>
 
-    <!-- 首页 -->
-    <div class="home-page" id="homePage">
-        <div class="greeting" id="greeting">Hi 鹅槑精，欢迎回来～</div>
-        
-        <!-- 打卡模块 -->
-        <div class="taiko-card">
-            <h2>🥁 太鼓达人打卡</h2>
-            <button class="taiko-btn" onclick="punchCard()">太鼓达人 打卡！</button>
-            <div class="stats-card">
-                <h3>📊 打卡数据总览</h3>
-                <p>鹅槑精累计：<span id="emeijingCount">0</span> 次</p>
-                <p>Yoinagi累计：<span id="yoinagiCount">0</span> 次</p>
-                <p>两人总打卡：<span id="totalCount">0</span> 次</p>
-            </div>
-        </div>
-
-        <!-- 功能入口 -->
-        <div class="btn-group">
-            <a href="javascript:showPage('publishPage')" class="func-btn">📝 发布日常</a>
-            <a href="javascript:showPage('calendarPage')" class="func-btn">📅 日历墙</a>
-            <a href="javascript:showPage('recordPage')" class="func-btn">📋 打卡记录</a>
-            <a href="javascript:showPage('backupPage')" class="func-btn">💾 备份恢复</a>
+<div class="home-page" id="homePage">
+    <div class="greeting" id="greeting">Hi 鹅槑精，欢迎回来～</div>
+    <div class="taiko-card">
+        <h2>🥁 太鼓达人打卡</h2>
+        <button class="taiko-btn" onclick="punchCard()">太鼓达人 打卡！</button>
+        <div class="stats-card">
+            <h3>📊 打卡数据总览</h3>
+            <p>鹅槑精累计：<span id="emeijingCount">0</span> 次</p>
+            <p>Yoinagi累计：<span id="yoinagiCount">0</span> 次</p>
+            <p>两人总打卡：<span id="totalCount">0</span> 次</p>
         </div>
     </div>
-
-    <!-- 发布日常页 -->
-    <div class="page" id="publishPage">
-        <div class="page-header">
-            <a href="javascript:showPage('homePage')">🔙 返回首页</a>
-            <a href="javascript:showPage('publishPage')">发布日常</a>
-            <a href="javascript:showPage('calendarPage')">日历墙</a>
-            <a href="javascript:showPage('recordPage')">打卡记录</a>
-            <a href="javascript:showPage('backupPage')">备份恢复</a>
-        </div>
-        <h2>📝 发布新日常</h2>
-        <div class="publish-form">
-            <input type="text" id="noteTitle" placeholder="标题（可选）">
-            <select id="noteAuthor">
-                <option value="鹅槑精">鹅槑精</option>
-                <option value="Yoinagi">Yoinagi</option>
-            </select>
-            <textarea id="noteContent" placeholder="文案（可选）"></textarea>
-            <input type="file" id="noteImages" multiple accept="image/*">
-            <div class="loading" id="publishLoading">图片压缩中...请稍等</div>
-            <button class="publish-btn" onclick="publishNote()">✨ 发布日常</button>
-        </div>
+    <div class="btn-group">
+        <a href="javascript:showPage('publishPage')" class="func-btn">📝 发布日常</a>
+        <a href="javascript:showPage('calendarPage')" class="func-btn">📅 日历墙</a>
+        <a href="javascript:showPage('recordPage')" class="func-btn">📋 打卡记录</a>
     </div>
+</div>
 
-    <!-- 日历墙页 -->
-    <div class="page" id="calendarPage">
-        <div class="page-header">
-            <a href="javascript:showPage('homePage')">🔙 返回首页</a>
-            <a href="javascript:showPage('publishPage')">发布日常</a>
-            <a href="javascript:showPage('calendarPage')">日历墙</a>
-            <a href="javascript:showPage('recordPage')">打卡记录</a>
-            <a href="javascript:showPage('backupPage')">备份恢复</a>
-        </div>
-        <h2>📅 日常日历墙</h2>
-        <div class="calendar">
-            <div class="calendar-header">
-                <button class="calendar-nav-btn" onclick="changeMonth(-1)">◀ 上一月</button>
-                <div class="calendar-month-title" id="currentMonthTitle">2026年3月</div>
-                <button class="calendar-nav-btn" onclick="changeMonth(1)">下一月 ▶</button>
-            </div>
-            <div class="calendar-grid" id="calendarGrid"></div>
-            <p style="margin-top: 10px;">🔵蓝色底色 = 当天有记录 | 点击日期查看详情 | 点击图片查看大图</p>
-        </div>
+<div class="page" id="publishPage">
+    <div class="page-header">
+        <a href="javascript:showPage('homePage')">🔙 返回首页</a>
+        <a href="javascript:showPage('publishPage')">发布日常</a>
+        <a href="javascript:showPage('calendarPage')">日历墙</a>
     </div>
-
-    <!-- 打卡记录页 -->
-    <div class="page" id="recordPage">
-        <div class="page-header">
-            <a href="javascript:showPage('homePage')">🔙 返回首页</a>
-            <a href="javascript:showPage('publishPage')">发布日常</a>
-            <a href="javascript:showPage('calendarPage')">日历墙</a>
-            <a href="javascript:showPage('recordPage')">打卡记录</a>
-            <a href="javascript:showPage('backupPage')">备份恢复</a>
-        </div>
-        <h2>🥁 全量打卡记录</h2>
-        <div id="recordList">
-        </div>
+    <h2>📝 发布新日常</h2>
+    <div class="publish-form">
+        <input type="text" id="noteTitle" placeholder="标题（可选）">
+        <select id="noteAuthor">
+            <option value="鹅槑精">鹅槑精</option>
+            <option value="Yoinagi">Yoinagi</option>
+        </select>
+        <textarea id="noteContent" placeholder="文案（可选）"></textarea>
+        <input type="file" id="noteImages" multiple accept="image/*">
+        <div class="loading" id="publishLoading">图片压缩中...请稍等</div>
+        <button class="publish-btn" onclick="publishNote()">✨ 发布日常</button>
     </div>
+</div>
 
-    <!-- 备份恢复页 -->
-    <div class="page" id="backupPage">
-        <div class="page-header">
-            <a href="javascript:showPage('homePage')">🔙 返回首页</a>
-            <a href="javascript:showPage('publishPage')">发布日常</a>
-            <a href="javascript:showPage('calendarPage')">日历墙</a>
-            <a href="javascript:showPage('recordPage')">打卡记录</a>
-            <a href="javascript:showPage('backupPage')">备份恢复</a>
-        </div>
-        <h2>💾 数据备份与恢复</h2>
-        <p style="color: red; font-size: 14px;">🚨 恢复操作会覆盖当前数据 · 请谨慎操作</p>
-        <button class="backup-btn" onclick="backupData()">⬇️ 下载完整备份文件</button>
-        <div style="margin-top: 20px;">
-            <input type="file" id="restoreFile" accept=".json">
-            <button class="restore-btn" onclick="restoreData()">⬆️ 开始恢复数据</button>
-        </div>
+<div class="page" id="calendarPage">
+    <div class="page-header">
+        <a href="javascript:showPage('homePage')">🔙 返回首页</a>
+        <a href="javascript:showPage('publishPage')">发布日常</a>
+        <a href="javascript:showPage('calendarPage')">日历墙</a>
     </div>
-
-    <!-- 日常详情模态框 -->
-    <div id="noteModal" class="modal">
-        <div class="modal-content">
-            <h3 id="modalTitle">当天日常详情</h3>
-            <div id="modalContent"></div>
-            <button class="modal-close" onclick="closeModal()">关闭</button>
+    <h2>📅 日常日历墙</h2>
+    <div class="calendar">
+        <div class="calendar-header">
+            <button class="calendar-nav-btn" onclick="changeMonth(-1)">◀ 上一月</button>
+            <div class="calendar-month-title" id="currentMonthTitle">2026年3月</div>
+            <button class="calendar-nav-btn" onclick="changeMonth(1)">下一月 ▶</button>
         </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <p style="margin-top: 10px;">🔵蓝色底色 = 当天有记录 | 点击日期查看详情 | 点击图片查看大图</p>
     </div>
+</div>
 
-    <!-- 大图预览模态框 -->
-    <div id="imgPreviewModal" class="img-preview-modal">
-        <div class="img-preview-close" onclick="closeImgPreview()">×</div>
-        <div class="img-preview-content" id="imgPreviewContent">
-        </div>
+<div class="page" id="recordPage">
+    <div class="page-header">
+        <a href="javascript:showPage('homePage')">🔙 返回首页</a>
+        <a href="javascript:showPage('publishPage')">发布日常</a>
+        <a href="javascript:showPage('calendarPage')">日历墙</a>
+        <a href="javascript:showPage('recordPage')">打卡记录</a>
     </div>
+    <h2>🥁 全量打卡记录</h2>
+    <div id="recordList"></div>
+</div>
 
-    <script>
-        // 全局变量
-        let currentUser = "";
-        let currentDate = new Date();
-        let punchRecords = JSON.parse(localStorage.getItem("punchRecords")) || [];
-        let notes = JSON.parse(localStorage.getItem("notes")) || [];
+<div id="noteModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">当天日常详情</h3>
+        <div id="modalContent"></div>
+        <button class="modal-close" onclick="closeModal()">关闭</button>
+    </div>
+</div>
 
-        // 登录
-        function login(username) {
-            currentUser = username;
-            document.getElementById("loginPage").style.display = "none";
-            document.getElementById("homePage").style.display = "block";
-            document.getElementById("greeting").textContent = `Hi ${username}，欢迎回来～`;
-            updatePunchStats();
+<div id="imgPreviewModal" class="img-preview-modal">
+    <div class="img-preview-close" onclick="closeImgPreview()">×</div>
+    <div class="img-preview-content" id="imgPreviewContent"></div>
+</div>
+
+<script src="https://imgcache.qq.com/qcloud/tcbjs/1.26.0/tcb.js"></script>
+<script>
+// 已填入你的 CloudBase EnvID
+const ENV_ID = "love-diary-3gwe72z54f5cf996";
+
+const app = tcb.init({ env: ENV_ID });
+const db = app.database();
+const auth = app.auth();
+const storage = app.storage();
+
+let currentUser = "";
+let currentDate = new Date();
+let notes = [];
+let punchRecords = [];
+
+// 初始化：匿名登录 + 加载云端数据
+async function init() {
+    await auth.signInAnonymously();
+    await loadAllDataFromCloud();
+    renderAll();
+}
+
+// 从云端加载所有数据
+async function loadAllDataFromCloud() {
+    try {
+        // 加载日常
+        const noteRes = await db.collection("notes").orderBy("time", "desc").get();
+        notes = noteRes.data || [];
+        // 加载打卡记录
+        const punchRes = await db.collection("punches").orderBy("time", "desc").get();
+        punchRecords = punchRes.data || [];
+    } catch (e) {
+        console.error("加载数据失败", e);
+        alert("数据加载失败，请刷新重试");
+    }
+}
+
+function renderAll() {
+    updatePunchStats();
+    renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    renderPunchRecords();
+}
+
+// 登录
+function login(username) {
+    currentUser = username;
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("homePage").style.display = "block";
+    document.getElementById("greeting").textContent = `Hi ${username}，欢迎回来～`;
+    renderAll();
+}
+
+// 切换页面
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(page => page.style.display = "none");
+    document.getElementById("homePage").style.display = "none";
+    if (pageId === "homePage") {
+        document.getElementById("homePage").style.display = "block";
+    } else {
+        document.getElementById(pageId).style.display = "block";
+        if (pageId === "calendarPage") {
+            renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
         }
+    }
+}
 
-        // 显示指定页面
-        function showPage(pageId) {
-            document.querySelectorAll(".page").forEach(page => page.style.display = "none");
-            document.getElementById("homePage").style.display = "none";
-            if (pageId === "homePage") {
-                document.getElementById("homePage").style.display = "block";
-            } else {
-                document.getElementById(pageId).style.display = "block";
-                if (pageId === "calendarPage") {
-                    renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+// 图片压缩
+function compressImage(file, maxWidth = 800, quality = 0.7) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const canvas = document.createElement("canvas");
+                let width = img.width;
+                let height = img.height;
+                if (width > maxWidth) {
+                    height = height * (maxWidth / width);
+                    width = maxWidth;
                 }
-            }
-        }
-
-        // 图片压缩
-        function compressImage(file, maxWidth = 800, quality = 0.7) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = function() {
-                        const canvas = document.createElement("canvas");
-                        let width = img.width;
-                        let height = img.height;
-                        if (width > maxWidth) {
-                            height = height * (maxWidth / width);
-                            width = maxWidth;
-                        }
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext("2d");
-                        ctx.drawImage(img, 0, 0, width, height);
-                        const base64 = canvas.toDataURL(file.type, quality);
-                        resolve(base64);
-                    };
-                };
-            });
-        }
-
-        async function compressImages(files) {
-            const base64List = [];
-            for (let i = 0; i < files.length; i++) {
-                const base64 = await compressImage(files[i]);
-                base64List.push(base64);
-            }
-            return base64List;
-        }
-
-        // 渲染日历
-        function renderCalendar(year, month) {
-            const calendarGrid = document.getElementById("calendarGrid");
-            const monthTitle = document.getElementById("currentMonthTitle");
-            monthTitle.textContent = `${year}年${month + 1}月`;
-            calendarGrid.innerHTML = "";
-
-            const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
-            weekdays.forEach(day => {
-                const div = document.createElement("div");
-                div.textContent = day;
-                div.style.fontWeight = "bold";
-                calendarGrid.appendChild(div);
-            });
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            for (let i = 0; i < firstDay; i++) {
-                const div = document.createElement("div");
-                calendarGrid.appendChild(div);
-            }
-
-            const hasContentDates = getHasContentDates(year, month);
-
-            for (let day = 1; day <= totalDays; day++) {
-                const div = document.createElement("div");
-                div.textContent = day;
-                const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                div.setAttribute("data-date", dateStr);
-
-                if (hasContentDates.includes(day)) {
-                    div.classList.add("calendar-day", "has-content");
-                } else {
-                    div.classList.add("calendar-day");
-                }
-
-                div.addEventListener("click", function() {
-                    const date = this.getAttribute("data-date");
-                    if (date) showNoteDetail(date);
-                });
-
-                calendarGrid.appendChild(div);
-            }
-
-            currentDate = new Date(year, month, 1);
-        }
-
-        // 切换月份
-        function changeMonth(delta) {
-            const newMonth = currentDate.getMonth() + delta;
-            const newYear = currentDate.getFullYear();
-            let targetYear = newYear;
-            let targetMonth = newMonth;
-            if (newMonth < 0) {
-                targetYear = newYear - 1;
-                targetMonth = 11;
-            } else if (newMonth > 11) {
-                targetYear = newYear + 1;
-                targetMonth = 0;
-            }
-            renderCalendar(targetYear, targetMonth);
-        }
-
-        // 获取有内容的日期
-        function getHasContentDates(year, month) {
-            const dates = [];
-            notes.forEach(note => {
-                const noteDate = new Date(note.time);
-                if (noteDate.getFullYear() === year && noteDate.getMonth() === month) {
-                    const day = noteDate.getDate();
-                    if (!dates.includes(day)) dates.push(day);
-                }
-            });
-            return dates;
-        }
-
-        // 显示详情
-        function showNoteDetail(date) {
-            const modal = document.getElementById("noteModal");
-            const modalContent = document.getElementById("modalContent");
-            const targetNotes = notes.filter(note => {
-                const d = new Date(note.time);
-                const s = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-                return s === date;
-            });
-
-            if (targetNotes.length === 0) {
-                modalContent.innerHTML = "<p>当天没有发布日常哦～</p>";
-            } else {
-                let html = "";
-                targetNotes.forEach(note => {
-                    html += `
-                        <div style="margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid #eee;">
-                            <h4>${note.title || "无标题"}</h4>
-                            <div class="note-meta">👤 ${note.author} | ⏰ ${note.time}</div>
-                            <div class="note-content">${note.content || "无内容"}</div>
-                    `;
-                    if (note.images && note.images.length > 0) {
-                        html += `<div class="note-images">`;
-                        note.images.forEach(img => {
-                            html += `<img src="${img}" onclick="showImgPreview('${img}')">`;
-                        });
-                        html += `</div>`;
-                    }
-                    html += `</div>`;
-                });
-                modalContent.innerHTML = html;
-            }
-            modal.style.display = "flex";
-        }
-
-        // 关闭详情
-        function closeModal() {
-            document.getElementById("noteModal").style.display = "none";
-        }
-
-        // 大图预览
-        function showImgPreview(src) {
-            const m = document.getElementById("imgPreviewModal");
-            const c = document.getElementById("imgPreviewContent");
-            c.innerHTML = `<img src="${src}">`;
-            m.style.display = "flex";
-        }
-
-        function closeImgPreview() {
-            document.getElementById("imgPreviewModal").style.display = "none";
-        }
-
-        // 打卡
-        function punchCard() {
-            const now = new Date();
-            const timeStr = now.toLocaleString("zh-CN", {
-                year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit"
-            }).replace(/\//g, "-");
-            punchRecords.push({ user: currentUser, time: timeStr });
-            localStorage.setItem("punchRecords", JSON.stringify(punchRecords));
-            updatePunchStats();
-            alert("打卡成功！");
-        }
-
-        function updatePunchStats() {
-            const emeijing = punchRecords.filter(r => r.user === "鹅槑精").length;
-            const yoinagi = punchRecords.filter(r => r.user === "Yoinagi").length;
-            const total = emeijing + yoinagi;
-            document.getElementById("emeijingCount").textContent = emeijing;
-            document.getElementById("yoinagiCount").textContent = yoinagi;
-            document.getElementById("totalCount").textContent = total;
-            renderPunchRecords();
-        }
-
-        function renderPunchRecords() {
-            const list = document.getElementById("recordList");
-            list.innerHTML = "";
-            const sorted = [...punchRecords].sort((a,b) => new Date(b.time) - new Date(a.time));
-            if (sorted.length === 0) {
-                list.innerHTML = "<p>暂无打卡记录～</p>";
-                return;
-            }
-            sorted.forEach(r => {
-                const item = document.createElement("div");
-                item.className = "record-item";
-                item.textContent = `⏰ ${r.time}  👤 ${r.user}`;
-                list.appendChild(item);
-            });
-        }
-
-        // 发布日常
-        async function publishNote() {
-            const title = document.getElementById("noteTitle").value;
-            const author = document.getElementById("noteAuthor").value;
-            const content = document.getElementById("noteContent").value;
-            const files = document.getElementById("noteImages").files;
-            const loading = document.getElementById("publishLoading");
-            loading.style.display = "block";
-
-            try {
-                let images = [];
-                if (files.length > 0) {
-                    images = await compressImages(files);
-                }
-                const note = {
-                    title, author, content,
-                    time: new Date().toLocaleString(),
-                    images: images
-                };
-                notes.push(note);
-                localStorage.setItem("notes", JSON.stringify(notes));
-                loading.style.display = "none";
-                alert("发布成功！");
-                document.getElementById("noteTitle").value = "";
-                document.getElementById("noteContent").value = "";
-                document.getElementById("noteImages").value = "";
-                if (document.getElementById("calendarPage").style.display === "block") {
-                    renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-                }
-            } catch (e) {
-                loading.style.display = "none";
-                alert("发布失败");
-            }
-        }
-
-        // 备份恢复
-        function backupData() {
-            const data = { punchRecords, notes };
-            const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = `emeijing-yoinagi-backup-${new Date().getTime()}.json`;
-            a.click();
-        }
-
-        function restoreData() {
-            const file = document.getElementById("restoreFile").files[0];
-            if (!file) { alert("请选择文件"); return; }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    punchRecords = data.punchRecords || [];
-                    notes = data.notes || [];
-                    localStorage.setItem("punchRecords", JSON.stringify(punchRecords));
-                    localStorage.setItem("notes", JSON.stringify(notes));
-                    updatePunchStats();
-                    if (document.getElementById("calendarPage").style.display === "block") {
-                        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-                    }
-                    alert("恢复成功！");
-                } catch (e) {
-                    alert("格式错误");
-                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+                const base64 = canvas.toDataURL(file.type, quality);
+                resolve(base64);
             };
-            reader.readAsText(file);
+        };
+    });
+}
+
+async function compressImages(files) {
+    const base64List = [];
+    for (let i = 0; i < files.length; i++) {
+        const base64 = await compressImage(files[i]);
+        base64List.push(base64);
+    }
+    return base64List;
+}
+
+// 打卡（云端保存）
+async function punchCard() {
+    try {
+        await db.collection("punches").add({
+            user: currentUser,
+            time: new Date().toLocaleString()
+        });
+        await loadAllDataFromCloud();
+        renderAll();
+        alert("打卡成功！已同步到云端");
+    } catch (e) {
+        alert("打卡失败");
+    }
+}
+
+// 更新打卡统计
+function updatePunchStats() {
+    const emeijing = punchRecords.filter(r => r.user === "鹅槑精").length;
+    const yoinagi = punchRecords.filter(r => r.user === "Yoinagi").length;
+    const total = emeijing + yoinagi;
+    document.getElementById("emeijingCount").textContent = emeijing;
+    document.getElementById("yoinagiCount").textContent = yoinagi;
+    document.getElementById("totalCount").textContent = total;
+}
+
+// 渲染打卡记录
+function renderPunchRecords() {
+    const list = document.getElementById("recordList");
+    list.innerHTML = "";
+    if (punchRecords.length === 0) {
+        list.innerHTML = "<p>暂无打卡记录～</p>";
+        return;
+    }
+    punchRecords.forEach(r => {
+        const item = document.createElement("div");
+        item.className = "record-item";
+        item.textContent = `⏰ ${r.time}  👤 ${r.user}`;
+        list.appendChild(item);
+    });
+}
+
+// 发布日常（云端保存）
+async function publishNote() {
+    const title = document.getElementById("noteTitle").value;
+    const author = document.getElementById("noteAuthor").value;
+    const content = document.getElementById("noteContent").value;
+    const files = document.getElementById("noteImages").files;
+    const loading = document.getElementById("publishLoading");
+    loading.style.display = "block";
+
+    try {
+        let images = [];
+        if (files.length > 0) {
+            images = await compressImages(files);
+        }
+        // 保存到云端
+        await db.collection("notes").add({
+            title, author, content,
+            time: new Date().toLocaleString(),
+            images: images
+        });
+        loading.style.display = "none";
+        alert("发布成功！已同步");
+        // 清空表单
+        document.getElementById("noteTitle").value = "";
+        document.getElementById("noteContent").value = "";
+        document.getElementById("noteImages").value = "";
+        // 重新加载数据
+        await loadAllDataFromCloud();
+        renderAll();
+        showPage("calendarPage");
+    } catch (e) {
+        loading.style.display = "none";
+        alert("发布失败");
+    }
+}
+
+// 渲染日历
+function renderCalendar(year, month) {
+    const calendarGrid = document.getElementById("calendarGrid");
+    const monthTitle = document.getElementById("currentMonthTitle");
+    monthTitle.textContent = `${year}年${month + 1}月`;
+    calendarGrid.innerHTML = "";
+
+    const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+    weekdays.forEach(day => {
+        const div = document.createElement("div");
+        div.textContent = day;
+        div.style.fontWeight = "bold";
+        calendarGrid.appendChild(div);
+    });
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+        const div = document.createElement("div");
+        calendarGrid.appendChild(div);
+    }
+
+    const hasContentDates = getHasContentDates(year, month);
+
+    for (let day = 1; day <= totalDays; day++) {
+        const div = document.createElement("div");
+        div.textContent = day;
+        const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        div.setAttribute("data-date", dateStr);
+
+        if (hasContentDates.includes(day)) {
+            div.classList.add("calendar-day", "has-content");
+        } else {
+            div.classList.add("calendar-day");
         }
 
-        // 初始化
-        window.onload = function() {
-            renderPunchRecords();
-        };
-    </script>
+        div.addEventListener("click", function() {
+            const date = this.getAttribute("data-date");
+            if (date) showNoteDetail(date);
+        });
+
+        calendarGrid.appendChild(div);
+    }
+    currentDate = new Date(year, month, 1);
+}
+
+// 切换月份
+function changeMonth(delta) {
+    const newMonth = currentDate.getMonth() + delta;
+    const newYear = currentDate.getFullYear();
+    let targetYear = newYear;
+    let targetMonth = newMonth;
+    if (newMonth < 0) {
+        targetYear = newYear - 1;
+        targetMonth = 11;
+    } else if (newMonth > 11) {
+        targetYear = newYear + 1;
+        targetMonth = 0;
+    }
+    renderCalendar(targetYear, targetMonth);
+}
+
+// 获取有内容的日期
+function getHasContentDates(year, month) {
+    const dates = [];
+    notes.forEach(note => {
+        const noteDate = new Date(note.time);
+        if (noteDate.getFullYear() === year && noteDate.getMonth() === month) {
+            const day = noteDate.getDate();
+            if (!dates.includes(day)) dates.push(day);
+        }
+    });
+    return dates;
+}
+
+// 显示详情
+function showNoteDetail(date) {
+    const modal = document.getElementById("noteModal");
+    const modalContent = document.getElementById("modalContent");
+    const targetNotes = notes.filter(note => {
+        const d = new Date(note.time);
+        const s = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        return s === date;
+    });
+
+    if (targetNotes.length === 0) {
+        modalContent.innerHTML = "<p>当天没有发布日常哦～</p>";
+    } else {
+        let html = "";
+        targetNotes.forEach(note => {
+            html += `
+                <div style="margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid #eee;">
+                    <h4>${note.title || "无标题"}</h4>
+                    <div class="note-meta">👤 ${note.author} | ⏰ ${note.time}</div>
+                    <div class="note-content">${note.content || "无内容"}</div>
+            `;
+            if (note.images && note.images.length > 0) {
+                html += `<div class="note-images">`;
+                note.images.forEach(img => {
+                    html += `<img src="${img}" onclick="showImgPreview('${img}')">`;
+                });
+                html += `</div>`;
+            }
+            html += `</div>`;
+        });
+        modalContent.innerHTML = html;
+    }
+    modal.style.display = "flex";
+}
+
+// 关闭详情
+function closeModal() {
+    document.getElementById("noteModal").style.display = "none";
+}
+
+// 大图预览
+function showImgPreview(src) {
+    const m = document.getElementById("imgPreviewModal");
+    const c = document.getElementById("imgPreviewContent");
+    c.innerHTML = `<img src="${src}">`;
+    m.style.display = "flex";
+}
+
+function closeImgPreview() {
+    document.getElementById("imgPreviewModal").style.display = "none";
+}
+
+window.onload = init;
+</script>
 </body>
 </html>
