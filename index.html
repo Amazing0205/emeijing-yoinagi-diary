@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 核心适配：强制移动端视口宽度=设备宽度，禁止缩放 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>鹅槑精 & Yoinagi 日常记录站</title>
     <style>
@@ -23,18 +22,18 @@
         body {
             background: var(--bg);
             color: var(--text);
-            padding: 15px; /* 移动端减小内边距 */
+            padding: 15px;
             max-width: 800px;
             margin: 0 auto;
-            font-size: 16px; /* 基础字体适配移动端 */
+            font-size: 16px;
         }
-        /* 登录页样式（移动端居中放大按钮） */
+        /* 登录页样式 */
         .login-page {
             text-align: center;
             padding: 40px 0;
         }
         .login-page h1 {
-            font-size: 20px; /* 移动端标题缩小 */
+            font-size: 20px;
             margin-bottom: 40px;
         }
         .login-btn {
@@ -42,11 +41,11 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 18px 40px; /* 增大移动端点击区域 */
+            padding: 18px 40px;
             font-size: 18px;
             margin: 10px 5px;
             cursor: pointer;
-            width: 80%; /* 移动端按钮宽度占80% */
+            width: 80%;
             max-width: 300px;
         }
         .login-btn:hover {
@@ -58,9 +57,9 @@
         }
         .greeting {
             margin-bottom: 20px;
-            font-size: 18px; /* 移动端问候语缩小 */
+            font-size: 18px;
         }
-        /* 打卡模块（移动端宽度自适应） */
+        /* 打卡模块 */
         .taiko-card {
             text-align: center;
             margin-bottom: 20px;
@@ -74,10 +73,10 @@
             border: none;
             border-radius: 8px;
             padding: 15px 40px;
-            font-size: 20px; /* 移动端打卡按钮字体缩小 */
+            font-size: 20px;
             cursor: pointer;
             margin-bottom: 15px;
-            width: 90%; /* 移动端打卡按钮宽度占90% */
+            width: 90%;
             max-width: 300px;
         }
         .stats-card {
@@ -85,7 +84,7 @@
             border: 1px solid var(--primary);
             border-radius: 8px;
             padding: 16px;
-            width: 90%; /* 移动端卡片宽度自适应 */
+            width: 90%;
             max-width: 300px;
             margin: 0 auto;
         }
@@ -97,10 +96,9 @@
             margin: 8px 0;
             font-size: 14px;
         }
-        /* 功能按钮：移动端1列，大屏2列（核心适配） */
+        /* 功能按钮：响应式网格 */
         .btn-group {
             display: grid;
-            /* 响应式网格：屏幕<600px时1列，否则2列 */
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
             margin: 20px 0;
@@ -115,7 +113,6 @@
             cursor: pointer;
             text-decoration: none;
             text-align: center;
-            /* 增大移动端点击区域 */
             min-height: 50px;
             display: flex;
             align-items: center;
@@ -127,35 +124,34 @@
         }
         .page-header {
             display: flex;
-            gap: 8px; /* 移动端减小导航间距 */
+            gap: 8px;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--primary);
-            /* 移动端导航换行 */
             flex-wrap: wrap;
         }
         .page-header a {
             color: var(--primary);
             text-decoration: none;
-            font-size: 14px; /* 移动端导航字体缩小 */
+            font-size: 14px;
             padding: 5px 0;
         }
         .page h2 {
             font-size: 18px;
             margin-bottom: 15px;
         }
-        /* 发布页样式（移动端适配） */
+        /* 发布页样式 */
         .publish-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
         .publish-form input, .publish-form textarea, .publish-form select {
-            padding: 12px; /* 增大移动端输入框内边距 */
+            padding: 12px;
             border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 16px;
-            width: 100%; /* 输入框宽度自适应 */
+            width: 100%;
         }
         .publish-form textarea {
             min-height: 120px;
@@ -170,9 +166,9 @@
             cursor: pointer;
             width: 100%;
         }
-        /* 日历墙样式（移动端适配） */
+        /* 日历墙样式 */
         .calendar {
-            width: 100%; /* 日历宽度自适应 */
+            width: 100%;
             margin: 0 auto;
         }
         .calendar-header {
@@ -182,12 +178,12 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 3px; /* 移动端减小日历间距 */
+            gap: 3px;
         }
         .calendar-grid > div {
-            padding: 8px 0; /* 移动端日历格子内边距 */
+            padding: 8px 0;
             text-align: center;
-            font-size: 12px; /* 移动端日历字体缩小 */
+            font-size: 12px;
             border: 1px solid var(--border);
             border-radius: 4px;
             cursor: pointer;
@@ -200,16 +196,16 @@
             font-size: 14px;
             margin-top: 10px;
         }
-        /* 打卡记录样式（移动端适配） */
+        /* 打卡记录样式 */
         .record-item {
             background: var(--card-bg);
             border-radius: 8px;
             padding: 12px;
             margin: 8px 0;
             border-left: 4px solid var(--primary);
-            font-size: 14px; /* 移动端记录字体缩小 */
+            font-size: 14px;
         }
-        /* 备份恢复页样式（移动端适配） */
+        /* 备份恢复页样式 */
         .backup-btn, .restore-btn {
             background: var(--primary);
             color: white;
@@ -219,11 +215,67 @@
             font-size: 16px;
             cursor: pointer;
             margin: 10px 0;
-            width: 100%; /* 备份按钮宽度自适应 */
+            width: 100%;
         }
         #restoreFile {
             width: 100%;
             padding: 8px;
+        }
+        /* 新增：日常详情模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .modal-content h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        .modal-content .note-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .modal-content .note-content {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        .modal-content .note-images {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .modal-content .note-images img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        .modal-close {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
         }
     </style>
 </head>
@@ -254,7 +306,7 @@
             </div>
         </div>
 
-        <!-- 功能入口 响应式网格（移动端1列，大屏2列） -->
+        <!-- 功能入口 -->
         <div class="btn-group">
             <a href="javascript:showPage('publishPage')" class="func-btn">📝 发布日常</a>
             <a href="javascript:showPage('calendarPage')" class="func-btn">📅 日历墙</a>
@@ -298,11 +350,11 @@
         <div class="calendar">
             <div class="calendar-grid">
                 <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
-                <div></div><div></div><div></div><div>1</div><div>2</div><div>3</div><div>4</div>
-                <div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div>
-                <div>12</div><div>13</div><div class="calendar-day has-content">14</div><div>15</div><div>16</div><div>17</div><div>18</div>
-                <div>19</div><div class="calendar-day has-content">20</div><div>21</div><div>22</div><div class="calendar-day has-content">23</div><div>24</div><div>25</div>
-                <div>26</div><div>27</div><div>28</div><div>29</div><div>30</div><div>31</div><div></div>
+                <div></div><div></div><div></div><div data-date="2026-03-01">1</div><div data-date="2026-03-02">2</div><div data-date="2026-03-03">3</div><div data-date="2026-03-04">4</div>
+                <div data-date="2026-03-05">5</div><div data-date="2026-03-06">6</div><div data-date="2026-03-07">7</div><div data-date="2026-03-08">8</div><div data-date="2026-03-09">9</div><div data-date="2026-03-10">10</div><div data-date="2026-03-11">11</div>
+                <div data-date="2026-03-12">12</div><div data-date="2026-03-13">13</div><div class="calendar-day has-content" data-date="2026-03-14">14</div><div data-date="2026-03-15">15</div><div data-date="2026-03-16">16</div><div data-date="2026-03-17">17</div><div data-date="2026-03-18">18</div>
+                <div data-date="2026-03-19">19</div><div class="calendar-day has-content" data-date="2026-03-20">20</div><div data-date="2026-03-21">21</div><div data-date="2026-03-22">22</div><div class="calendar-day has-content" data-date="2026-03-23">23</div><div data-date="2026-03-24">24</div><div data-date="2026-03-25">25</div>
+                <div data-date="2026-03-26">26</div><div data-date="2026-03-27">27</div><div data-date="2026-03-28">28</div><div data-date="2026-03-29">29</div><div data-date="2026-03-30">30</div><div data-date="2026-03-31">31</div><div></div>
             </div>
             <p style="margin-top: 10px;">🔵蓝色底色 = 当天有记录 | 点击日期查看详情</p>
         </div>
@@ -320,9 +372,6 @@
         <h2>🥁 全量打卡记录</h2>
         <div id="recordList">
             <!-- 打卡记录会动态生成 -->
-            <div class="record-item">⏰ 2026-03-06 19:20:00  👤 鹅槑精</div>
-            <div class="record-item">⏰ 2026-03-06 19:18:00  👤 Yoinagi</div>
-            <div class="record-item">⏰ 2026-03-05 22:10:00  👤 鹅槑精</div>
         </div>
     </div>
 
@@ -341,6 +390,15 @@
         <div style="margin-top: 20px;">
             <input type="file" id="restoreFile" accept=".json">
             <button class="restore-btn" onclick="restoreData()">⬆️ 开始恢复数据</button>
+        </div>
+    </div>
+
+    <!-- 新增：日常详情模态框 -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">当天日常详情</h3>
+            <div id="modalContent"></div>
+            <button class="modal-close" onclick="closeModal()">关闭</button>
         </div>
     </div>
 
@@ -370,7 +428,72 @@
                 document.getElementById("homePage").style.display = "block";
             } else {
                 document.getElementById(pageId).style.display = "block";
+                // 如果是日历页，绑定点击事件
+                if (pageId === "calendarPage") {
+                    bindCalendarClick();
+                }
             }
+        }
+
+        // 绑定日历点击事件
+        function bindCalendarClick() {
+            const calendarDays = document.querySelectorAll(".calendar-grid div[data-date]");
+            calendarDays.forEach(day => {
+                day.addEventListener("click", function() {
+                    const date = this.getAttribute("data-date");
+                    if (date) {
+                        showNoteDetail(date);
+                    }
+                });
+            });
+        }
+
+        // 显示日常详情模态框
+        function showNoteDetail(date) {
+            const modal = document.getElementById("noteModal");
+            const modalContent = document.getElementById("modalContent");
+            // 筛选当天的日常
+            const todayNotes = notes.filter(note => {
+                // 提取日常的日期部分（适配不同时间格式）
+                const noteDate = new Date(note.time).toLocaleDateString("zh-CN", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit"
+                }).replace(/\//g, "-");
+                return noteDate === date;
+            });
+
+            if (todayNotes.length === 0) {
+                modalContent.innerHTML = "<p>当天没有发布日常哦～</p>";
+            } else {
+                let html = "";
+                todayNotes.forEach(note => {
+                    html += `
+                        <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+                            <h4>${note.title || "无标题"}</h4>
+                            <div class="note-meta">👤 ${note.author} | ⏰ ${note.time}</div>
+                            <div class="note-content">${note.content || "无内容"}</div>
+                    `;
+                    // 显示图片
+                    if (note.images && note.images.length > 0) {
+                        html += `<div class="note-images">`;
+                        note.images.forEach(img => {
+                            html += `<img src="${img}" alt="日常图片">`;
+                        });
+                        html += `</div>`;
+                    }
+                    html += `</div>`;
+                });
+                modalContent.innerHTML = html;
+            }
+
+            modal.style.display = "flex";
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            const modal = document.getElementById("noteModal");
+            modal.style.display = "none";
         }
 
         // 打卡
