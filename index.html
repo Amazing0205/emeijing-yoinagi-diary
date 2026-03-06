@@ -2,10 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 核心适配：强制移动端视口宽度=设备宽度，禁止缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>鹅槑精 & Yoinagi 日常记录站</title>
     <style>
-        /* 全局蓝白风格 */
+        /* 全局蓝白风格 + 移动端适配 */
         :root {
             --primary: #4299e1;
             --bg: #fff;
@@ -22,24 +23,31 @@
         body {
             background: var(--bg);
             color: var(--text);
-            padding: 20px;
+            padding: 15px; /* 移动端减小内边距 */
             max-width: 800px;
             margin: 0 auto;
+            font-size: 16px; /* 基础字体适配移动端 */
         }
-        /* 登录页样式 */
+        /* 登录页样式（移动端居中放大按钮） */
         .login-page {
             text-align: center;
             padding: 40px 0;
+        }
+        .login-page h1 {
+            font-size: 20px; /* 移动端标题缩小 */
+            margin-bottom: 40px;
         }
         .login-btn {
             background: var(--primary);
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 15px 40px;
+            padding: 18px 40px; /* 增大移动端点击区域 */
             font-size: 18px;
-            margin: 10px;
+            margin: 10px 5px;
             cursor: pointer;
+            width: 80%; /* 移动端按钮宽度占80% */
+            max-width: 300px;
         }
         .login-btn:hover {
             opacity: 0.9;
@@ -50,12 +58,15 @@
         }
         .greeting {
             margin-bottom: 20px;
-            font-size: 20px;
+            font-size: 18px; /* 移动端问候语缩小 */
         }
-        /* 打卡模块 */
+        /* 打卡模块（移动端宽度自适应） */
         .taiko-card {
             text-align: center;
             margin-bottom: 20px;
+        }
+        .taiko-card h2 {
+            font-size: 18px;
         }
         .taiko-btn {
             background: var(--primary);
@@ -63,25 +74,34 @@
             border: none;
             border-radius: 8px;
             padding: 15px 40px;
-            font-size: 24px;
+            font-size: 20px; /* 移动端打卡按钮字体缩小 */
             cursor: pointer;
             margin-bottom: 15px;
+            width: 90%; /* 移动端打卡按钮宽度占90% */
+            max-width: 300px;
         }
         .stats-card {
             background: var(--card-bg);
             border: 1px solid var(--primary);
             border-radius: 8px;
             padding: 16px;
+            width: 90%; /* 移动端卡片宽度自适应 */
             max-width: 300px;
             margin: 0 auto;
         }
+        .stats-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
         .stats-card p {
             margin: 8px 0;
+            font-size: 14px;
         }
-        /* 功能按钮 2×2 网格 */
+        /* 功能按钮：移动端1列，大屏2列（核心适配） */
         .btn-group {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            /* 响应式网格：屏幕<600px时1列，否则2列 */
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
             margin: 20px 0;
         }
@@ -90,11 +110,16 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px;
+            padding: 12px 10px;
             font-size: 16px;
             cursor: pointer;
             text-decoration: none;
             text-align: center;
+            /* 增大移动端点击区域 */
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         /* 二级页面样式 */
         .page {
@@ -102,42 +127,52 @@
         }
         .page-header {
             display: flex;
-            gap: 10px;
+            gap: 8px; /* 移动端减小导航间距 */
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--primary);
+            /* 移动端导航换行 */
+            flex-wrap: wrap;
         }
         .page-header a {
             color: var(--primary);
             text-decoration: none;
+            font-size: 14px; /* 移动端导航字体缩小 */
+            padding: 5px 0;
         }
-        /* 发布页样式 */
+        .page h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        /* 发布页样式（移动端适配） */
         .publish-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
         .publish-form input, .publish-form textarea, .publish-form select {
-            padding: 10px;
+            padding: 12px; /* 增大移动端输入框内边距 */
             border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 16px;
+            width: 100%; /* 输入框宽度自适应 */
         }
         .publish-form textarea {
-            min-height: 100px;
+            min-height: 120px;
         }
         .publish-btn {
             background: var(--primary);
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
             cursor: pointer;
+            width: 100%;
         }
-        /* 日历墙样式 */
+        /* 日历墙样式（移动端适配） */
         .calendar {
-            max-width: 600px;
+            width: 100%; /* 日历宽度自适应 */
             margin: 0 auto;
         }
         .calendar-header {
@@ -147,11 +182,12 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
+            gap: 3px; /* 移动端减小日历间距 */
         }
-        .calendar-day {
-            padding: 10px;
+        .calendar-grid > div {
+            padding: 8px 0; /* 移动端日历格子内边距 */
             text-align: center;
+            font-size: 12px; /* 移动端日历字体缩小 */
             border: 1px solid var(--border);
             border-radius: 4px;
             cursor: pointer;
@@ -160,24 +196,34 @@
             background: var(--primary);
             color: white;
         }
-        /* 打卡记录样式 */
+        .calendar p {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        /* 打卡记录样式（移动端适配） */
         .record-item {
             background: var(--card-bg);
             border-radius: 8px;
             padding: 12px;
             margin: 8px 0;
             border-left: 4px solid var(--primary);
+            font-size: 14px; /* 移动端记录字体缩小 */
         }
-        /* 备份恢复页样式 */
+        /* 备份恢复页样式（移动端适配） */
         .backup-btn, .restore-btn {
             background: var(--primary);
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 16px;
             cursor: pointer;
             margin: 10px 0;
+            width: 100%; /* 备份按钮宽度自适应 */
+        }
+        #restoreFile {
+            width: 100%;
+            padding: 8px;
         }
     </style>
 </head>
@@ -189,7 +235,7 @@
             <button class="login-btn" onclick="login('鹅槑精')">鹅槑精</button>
             <button class="login-btn" onclick="login('Yoinagi')">Yoinagi</button>
         </div>
-        <p style="margin-top: 20px;">点击昵称直接进入 · 无需密码</p>
+        <p style="margin-top: 20px; font-size: 14px;">点击昵称直接进入 · 无需密码</p>
     </div>
 
     <!-- 首页 -->
@@ -208,7 +254,7 @@
             </div>
         </div>
 
-        <!-- 功能入口 2×2 -->
+        <!-- 功能入口 响应式网格（移动端1列，大屏2列） -->
         <div class="btn-group">
             <a href="javascript:showPage('publishPage')" class="func-btn">📝 发布日常</a>
             <a href="javascript:showPage('calendarPage')" class="func-btn">📅 日历墙</a>
@@ -290,7 +336,7 @@
             <a href="javascript:showPage('backupPage')">备份恢复</a>
         </div>
         <h2>💾 数据备份与恢复</h2>
-        <p style="color: red;">🚨 恢复操作会覆盖当前数据 · 请谨慎操作</p>
+        <p style="color: red; font-size: 14px;">🚨 恢复操作会覆盖当前数据 · 请谨慎操作</p>
         <button class="backup-btn" onclick="backupData()">⬇️ 下载完整备份文件</button>
         <div style="margin-top: 20px;">
             <input type="file" id="restoreFile" accept=".json">
