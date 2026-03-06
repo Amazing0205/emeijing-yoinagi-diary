@@ -166,7 +166,7 @@
             cursor: pointer;
             width: 100%;
         }
-        /* 日历墙样式（新增月份切换） */
+        /* 日历墙样式（支持多月份切换） */
         .calendar {
             width: 100%;
             margin: 0 auto;
@@ -292,6 +292,13 @@
             cursor: pointer;
             width: 100%;
         }
+        /* 加载提示 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 10px;
+            color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -348,6 +355,7 @@
             </select>
             <textarea id="noteContent" placeholder="文案（可选）"></textarea>
             <input type="file" id="noteImages" multiple accept="image/*">
+            <div class="loading" id="publishLoading">图片压缩中...请稍等</div>
             <button class="publish-btn" onclick="publishNote()">✨ 发布日常</button>
         </div>
     </div>
@@ -451,6 +459,54 @@
                     renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
                 }
             }
+        }
+
+        // ========== 图片压缩核心函数 ==========
+        // 将File对象转为压缩后的Base64
+        function compressImage(file, maxWidth = 800, quality = 0.7) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    
+                    img.onload = function() {
+                        // 创建画布压缩
+                        const canvas = document.createElement("canvas");
+                        let width = img.width;
+                        let height = img.height;
+
+                        // 按宽度等比缩放
+                        if (width > maxWidth) {
+                            height = height * (maxWidth / width);
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+
+                        // 绘制压缩后的图片
+                        const ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // 转为Base64
+                        const base64 = canvas.toDataURL(file.type, quality);
+                        resolve(base64);
+                    };
+                };
+            });
+        }
+
+        // 批量压缩图片
+        async function compressImages(files) {
+            const base64List = [];
+            for (let i = 0; i < files.length; i++) {
+                const base64 = await compressImage(files[i]);
+                base64List.push(base64);
+            }
+            return base64List;
         }
 
         // ========== 日历核心功能 ==========
@@ -578,7 +634,7 @@
                             <div class="note-meta">👤 ${note.author} | ⏰ ${note.time}</div>
                             <div class="note-content">${note.content || "无内容"}</div>
                     `;
-                    // 显示图片
+                    // 显示图片（Base64格式）
                     if (note.images && note.images.length > 0) {
                         html += `<div class="note-images">`;
                         note.images.forEach(img => {
@@ -652,32 +708,53 @@
         }
 
         // ========== 发布/备份功能 ==========
-        // 发布日常
-        function publishNote() {
+        // 发布日常（带图片压缩）
+        async function publishNote() {
             const title = document.getElementById("noteTitle").value;
             const author = document.getElementById("noteAuthor").value;
             const content = document.getElementById("noteContent").value;
-            const images = document.getElementById("noteImages").files;
+            const files = document.getElementById("noteImages").files;
             
-            const note = {
-                title,
-                author,
-                content,
-                time: new Date().toLocaleString(),
-                images: Array.from(images).map(file => URL.createObjectURL(file))
-            };
-            notes.push(note);
-            localStorage.setItem("notes", JSON.stringify(notes));
+            // 显示加载提示
+            const loading = document.getElementById("publishLoading");
+            loading.style.display = "block";
             
-            alert("发布成功！");
-            // 清空表单
-            document.getElementById("noteTitle").value = "";
-            document.getElementById("noteContent").value = "";
-            document.getElementById("noteImages").value = "";
-            
-            // 如果当前在日历页，重新渲染日历（更新有内容的日期标记）
-            if (document.getElementById("calendarPage").style.display === "block") {
-                renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+            try {
+                // 压缩图片（无图片则为空数组）
+                let images = [];
+                if (files.length > 0) {
+                    images = await compressImages(files);
+                }
+                
+                // 构造日常数据
+                const note = {
+                    title,
+                    author,
+                    content,
+                    time: new Date().toLocaleString(),
+                    images: images
+                };
+                
+                // 保存到本地
+                notes.push(note);
+                localStorage.setItem("notes", JSON.stringify(notes));
+                
+                // 隐藏加载提示
+                loading.style.display = "none";
+                
+                alert("发布成功！");
+                // 清空表单
+                document.getElementById("noteTitle").value = "";
+                document.getElementById("noteContent").value = "";
+                document.getElementById("noteImages").value = "";
+                
+                // 如果当前在日历页，重新渲染日历（更新有内容的日期标记）
+                if (document.getElementById("calendarPage").style.display === "block") {
+                    renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+                }
+            } catch (e) {
+                loading.style.display = "none";
+                alert("发布失败：" + e.message);
             }
         }
 
