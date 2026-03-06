@@ -166,14 +166,29 @@
             cursor: pointer;
             width: 100%;
         }
-        /* 日历墙样式 */
+        /* 日历墙样式（新增月份切换） */
         .calendar {
             width: 100%;
             margin: 0 auto;
         }
         .calendar-header {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
+        }
+        .calendar-nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .calendar-month-title {
+            font-size: 16px;
+            font-weight: bold;
         }
         .calendar-grid {
             display: grid;
@@ -221,7 +236,7 @@
             width: 100%;
             padding: 8px;
         }
-        /* 新增：日常详情模态框样式 */
+        /* 日常详情模态框样式 */
         .modal {
             display: none;
             position: fixed;
@@ -337,7 +352,7 @@
         </div>
     </div>
 
-    <!-- 日历墙页 -->
+    <!-- 日历墙页（支持多月份切换） -->
     <div class="page" id="calendarPage">
         <div class="page-header">
             <a href="javascript:showPage('homePage')">🔙 返回首页</a>
@@ -346,15 +361,17 @@
             <a href="javascript:showPage('recordPage')">打卡记录</a>
             <a href="javascript:showPage('backupPage')">备份恢复</a>
         </div>
-        <h2>📅 2026年3月 日常日历墙</h2>
+        <h2>📅 日常日历墙</h2>
         <div class="calendar">
-            <div class="calendar-grid">
-                <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
-                <div></div><div></div><div></div><div data-date="2026-03-01">1</div><div data-date="2026-03-02">2</div><div data-date="2026-03-03">3</div><div data-date="2026-03-04">4</div>
-                <div data-date="2026-03-05">5</div><div data-date="2026-03-06">6</div><div data-date="2026-03-07">7</div><div data-date="2026-03-08">8</div><div data-date="2026-03-09">9</div><div data-date="2026-03-10">10</div><div data-date="2026-03-11">11</div>
-                <div data-date="2026-03-12">12</div><div data-date="2026-03-13">13</div><div class="calendar-day has-content" data-date="2026-03-14">14</div><div data-date="2026-03-15">15</div><div data-date="2026-03-16">16</div><div data-date="2026-03-17">17</div><div data-date="2026-03-18">18</div>
-                <div data-date="2026-03-19">19</div><div class="calendar-day has-content" data-date="2026-03-20">20</div><div data-date="2026-03-21">21</div><div data-date="2026-03-22">22</div><div class="calendar-day has-content" data-date="2026-03-23">23</div><div data-date="2026-03-24">24</div><div data-date="2026-03-25">25</div>
-                <div data-date="2026-03-26">26</div><div data-date="2026-03-27">27</div><div data-date="2026-03-28">28</div><div data-date="2026-03-29">29</div><div data-date="2026-03-30">30</div><div data-date="2026-03-31">31</div><div></div>
+            <!-- 月份切换导航 -->
+            <div class="calendar-header">
+                <button class="calendar-nav-btn" onclick="changeMonth(-1)">◀ 上一月</button>
+                <div class="calendar-month-title" id="currentMonthTitle">2026年3月</div>
+                <button class="calendar-nav-btn" onclick="changeMonth(1)">下一月 ▶</button>
+            </div>
+            <!-- 日历网格（动态生成） -->
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- 动态渲染的日历内容 -->
             </div>
             <p style="margin-top: 10px;">🔵蓝色底色 = 当天有记录 | 点击日期查看详情</p>
         </div>
@@ -393,7 +410,7 @@
         </div>
     </div>
 
-    <!-- 新增：日常详情模态框 -->
+    <!-- 日常详情模态框 -->
     <div id="noteModal" class="modal">
         <div class="modal-content">
             <h3 id="modalTitle">当天日常详情</h3>
@@ -405,6 +422,7 @@
     <script>
         // 全局变量
         let currentUser = "";
+        let currentDate = new Date(); // 当前显示的月份
         // 初始化数据
         let punchRecords = JSON.parse(localStorage.getItem("punchRecords")) || [];
         let notes = JSON.parse(localStorage.getItem("notes")) || [];
@@ -428,46 +446,132 @@
                 document.getElementById("homePage").style.display = "block";
             } else {
                 document.getElementById(pageId).style.display = "block";
-                // 如果是日历页，绑定点击事件
+                // 如果是日历页，初始化日历
                 if (pageId === "calendarPage") {
-                    bindCalendarClick();
+                    renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
                 }
             }
         }
 
-        // 绑定日历点击事件
-        function bindCalendarClick() {
-            const calendarDays = document.querySelectorAll(".calendar-grid div[data-date]");
-            calendarDays.forEach(day => {
-                day.addEventListener("click", function() {
+        // ========== 日历核心功能 ==========
+        // 渲染指定年份/月份的日历
+        function renderCalendar(year, month) {
+            const calendarGrid = document.getElementById("calendarGrid");
+            const monthTitle = document.getElementById("currentMonthTitle");
+            
+            // 更新月份标题
+            monthTitle.textContent = `${year}年${month + 1}月`;
+            
+            // 清空日历网格
+            calendarGrid.innerHTML = "";
+            
+            // 添加星期标题
+            const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+            weekdays.forEach(day => {
+                const div = document.createElement("div");
+                div.textContent = day;
+                div.style.fontWeight = "bold";
+                calendarGrid.appendChild(div);
+            });
+            
+            // 获取当月第一天是星期几（0=周日，6=周六）
+            const firstDay = new Date(year, month, 1).getDay();
+            
+            // 获取当月的总天数
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            
+            // 添加上月的空白格子
+            for (let i = 0; i < firstDay; i++) {
+                const div = document.createElement("div");
+                calendarGrid.appendChild(div);
+            }
+            
+            // 获取当月有日常记录的日期列表
+            const hasContentDates = getHasContentDates(year, month);
+            
+            // 添加当月的日期格子
+            for (let day = 1; day <= totalDays; day++) {
+                const div = document.createElement("div");
+                div.textContent = day;
+                div.setAttribute("data-date", `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
+                
+                // 标记有日常记录的日期
+                if (hasContentDates.includes(day)) {
+                    div.classList.add("calendar-day", "has-content");
+                } else {
+                    div.classList.add("calendar-day");
+                }
+                
+                // 绑定点击事件
+                div.addEventListener("click", function() {
                     const date = this.getAttribute("data-date");
                     if (date) {
                         showNoteDetail(date);
                     }
                 });
-            });
+                
+                calendarGrid.appendChild(div);
+            }
+            
+            // 保存当前显示的月份
+            currentDate = new Date(year, month, 1);
         }
 
+        // 切换月份（-1=上一月，1=下一月）
+        function changeMonth(delta) {
+            const newMonth = currentDate.getMonth() + delta;
+            const newYear = currentDate.getFullYear();
+            
+            // 处理跨年
+            let targetYear = newYear;
+            let targetMonth = newMonth;
+            if (newMonth < 0) {
+                targetYear = newYear - 1;
+                targetMonth = 11;
+            } else if (newMonth > 11) {
+                targetYear = newYear + 1;
+                targetMonth = 0;
+            }
+            
+            // 重新渲染日历
+            renderCalendar(targetYear, targetMonth);
+        }
+
+        // 获取指定年月有日常记录的日期列表
+        function getHasContentDates(year, month) {
+            const dates = [];
+            notes.forEach(note => {
+                // 解析日常的日期
+                const noteDate = new Date(note.time);
+                if (noteDate.getFullYear() === year && noteDate.getMonth() === month) {
+                    const day = noteDate.getDate();
+                    if (!dates.includes(day)) {
+                        dates.push(day);
+                    }
+                }
+            });
+            return dates;
+        }
+
+        // ========== 日常详情功能 ==========
         // 显示日常详情模态框
         function showNoteDetail(date) {
             const modal = document.getElementById("noteModal");
             const modalContent = document.getElementById("modalContent");
-            // 筛选当天的日常
-            const todayNotes = notes.filter(note => {
-                // 提取日常的日期部分（适配不同时间格式）
-                const noteDate = new Date(note.time).toLocaleDateString("zh-CN", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit"
-                }).replace(/\//g, "-");
-                return noteDate === date;
+            
+            // 筛选指定日期的日常
+            const targetNotes = notes.filter(note => {
+                // 格式化日常日期为统一格式
+                const noteDate = new Date(note.time);
+                const noteDateStr = `${noteDate.getFullYear()}-${String(noteDate.getMonth() + 1).padStart(2, '0')}-${String(noteDate.getDate()).padStart(2, '0')}`;
+                return noteDateStr === date;
             });
 
-            if (todayNotes.length === 0) {
+            if (targetNotes.length === 0) {
                 modalContent.innerHTML = "<p>当天没有发布日常哦～</p>";
             } else {
                 let html = "";
-                todayNotes.forEach(note => {
+                targetNotes.forEach(note => {
                     html += `
                         <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
                             <h4>${note.title || "无标题"}</h4>
@@ -496,6 +600,7 @@
             modal.style.display = "none";
         }
 
+        // ========== 打卡功能 ==========
         // 打卡
         function punchCard() {
             const now = new Date();
@@ -534,6 +639,10 @@
             recordList.innerHTML = "";
             // 按时间倒序
             const sortedRecords = [...punchRecords].sort((a, b) => new Date(b.time) - new Date(a.time));
+            if (sortedRecords.length === 0) {
+                recordList.innerHTML = "<p>暂无打卡记录～</p>";
+                return;
+            }
             sortedRecords.forEach(record => {
                 const item = document.createElement("div");
                 item.className = "record-item";
@@ -542,6 +651,7 @@
             });
         }
 
+        // ========== 发布/备份功能 ==========
         // 发布日常
         function publishNote() {
             const title = document.getElementById("noteTitle").value;
@@ -564,6 +674,11 @@
             document.getElementById("noteTitle").value = "";
             document.getElementById("noteContent").value = "";
             document.getElementById("noteImages").value = "";
+            
+            // 如果当前在日历页，重新渲染日历（更新有内容的日期标记）
+            if (document.getElementById("calendarPage").style.display === "block") {
+                renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+            }
         }
 
         // 备份数据
@@ -588,19 +703,31 @@
             }
             const reader = new FileReader();
             reader.onload = function(e) {
-                const data = JSON.parse(e.target.result);
-                punchRecords = data.punchRecords || [];
-                notes = data.notes || [];
-                localStorage.setItem("punchRecords", JSON.stringify(punchRecords));
-                localStorage.setItem("notes", JSON.stringify(notes));
-                updatePunchStats();
-                alert("恢复成功！");
+                try {
+                    const data = JSON.parse(e.target.result);
+                    punchRecords = data.punchRecords || [];
+                    notes = data.notes || [];
+                    localStorage.setItem("punchRecords", JSON.stringify(punchRecords));
+                    localStorage.setItem("notes", JSON.stringify(notes));
+                    updatePunchStats();
+                    
+                    // 重新渲染日历（如果当前在日历页）
+                    if (document.getElementById("calendarPage").style.display === "block") {
+                        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+                    }
+                    
+                    alert("恢复成功！");
+                } catch (e) {
+                    alert("备份文件格式错误！");
+                }
             };
             reader.readAsText(file);
         }
 
-        // 初始化打卡记录
-        renderPunchRecords();
+        // 初始化
+        window.onload = function() {
+            renderPunchRecords();
+        };
     </script>
 </body>
 </html>
