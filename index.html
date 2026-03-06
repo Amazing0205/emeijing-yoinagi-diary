@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鹅槑精 & Yoinagi 日常记录站</title>
+    <style>
+        /* 全局蓝白风格 */
+        :root {
+            --primary: #4299e1;
+            --bg: #fff;
+            --text: #333;
+            --card-bg: #f8f9fa;
+            --border: #e2e8f0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        /* 登录页样式 */
+        .login-page {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 40px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .login-btn:hover {
+            opacity: 0.9;
+        }
+        /* 首页样式 */
+        .home-page {
+            display: none;
+        }
+        .greeting {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        /* 打卡模块 */
+        .taiko-card {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .taiko-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 40px;
+            font-size: 24px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .stats-card {
+            background: var(--card-bg);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .stats-card p {
+            margin: 8px 0;
+        }
+        /* 功能按钮 2×2 网格 */
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .func-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+        /* 二级页面样式 */
+        .page {
+            display: none;
+        }
+        .page-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--primary);
+        }
+        .page-header a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        /* 发布页样式 */
+        .publish-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .publish-form input, .publish-form textarea, .publish-form select {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .publish-form textarea {
+            min-height: 100px;
+        }
+        .publish-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        /* 日历墙样式 */
+        .calendar {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .calendar-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .calendar-day {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .calendar-day.has-content {
+            background: var(--primary);
+            color: white;
+        }
+        /* 打卡记录样式 */
+        .record-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            border-left: 4px solid var(--primary);
+        }
+        /* 备份恢复页样式 */
+        .backup-btn, .restore-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录页 -->
+    <div class="login-page" id="loginPage">
+        <h1>🔵 鹅槑精 & Yoinagi 日常记录站 🔵</h1>
+        <div style="margin-top: 40px;">
+            <button class="login-btn" onclick="login('鹅槑精')">鹅槑精</button>
+            <button class="login-btn" onclick="login('Yoinagi')">Yoinagi</button>
+        </div>
+        <p style="margin-top: 20px;">点击昵称直接进入 · 无需密码</p>
+    </div>
+
+    <!-- 首页 -->
+    <div class="home-page" id="homePage">
+        <div class="greeting" id="greeting">Hi 鹅槑精，欢迎回来～</div>
+        
+        <!-- 打卡模块 -->
+        <div class="taiko-card">
+            <h2>🥁 太鼓达人打卡</h2>
+            <button class="taiko-btn" onclick="punchCard()">太鼓达人 打卡！</button>
+            <div class="stats-card">
+                <h3>📊 打卡数据总览</h3>
+                <p>鹅槑精累计：<span id="emeijingCount">0</span> 次</p>
+                <p>Yoinagi累计：<span id="yoinagiCount">0</span> 次</p>
+                <p>两人总打卡：<span id="totalCount">0</span> 次</p>
+            </div>
+        </div>
+
+        <!-- 功能入口 2×2 -->
+        <div class="btn-group">
+            <a href="javascript:showPage('publishPage')" class="func-btn">📝 发布日常</a>
+            <a href="javascript:showPage('calendarPage')" class="func-btn">📅 日历墙</a>
+            <a href="javascript:showPage('recordPage')" class="func-btn">📋 打卡记录</a>
+            <a href="javascript:showPage('backupPage')" class="func-btn">💾 备份恢复</a>
+        </div>
+    </div>
+
+    <!-- 发布日常页 -->
+    <div class="page" id="publishPage">
+        <div class="page-header">
+            <a href="javascript:showPage('homePage')">🔙 返回首页</a>
+            <a href="javascript:showPage('publishPage')">发布日常</a>
+            <a href="javascript:showPage('calendarPage')">日历墙</a>
+            <a href="javascript:showPage('recordPage')">打卡记录</a>
+            <a href="javascript:showPage('backupPage')">备份恢复</a>
+        </div>
+        <h2>📝 发布新日常</h2>
+        <div class="publish-form">
+            <input type="text" id="noteTitle" placeholder="标题（可选）">
+            <select id="noteAuthor">
+                <option value="鹅槑精">鹅槑精</option>
+                <option value="Yoinagi">Yoinagi</option>
+            </select>
+            <textarea id="noteContent" placeholder="文案（可选）"></textarea>
+            <input type="file" id="noteImages" multiple accept="image/*">
+            <button class="publish-btn" onclick="publishNote()">✨ 发布日常</button>
+        </div>
+    </div>
+
+    <!-- 日历墙页 -->
+    <div class="page" id="calendarPage">
+        <div class="page-header">
+            <a href="javascript:showPage('homePage')">🔙 返回首页</a>
+            <a href="javascript:showPage('publishPage')">发布日常</a>
+            <a href="javascript:showPage('calendarPage')">日历墙</a>
+            <a href="javascript:showPage('recordPage')">打卡记录</a>
+            <a href="javascript:showPage('backupPage')">备份恢复</a>
+        </div>
+        <h2>📅 2026年3月 日常日历墙</h2>
+        <div class="calendar">
+            <div class="calendar-grid">
+                <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+                <div></div><div></div><div></div><div>1</div><div>2</div><div>3</div><div>4</div>
+                <div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div>
+                <div>12</div><div>13</div><div class="calendar-day has-content">14</div><div>15</div><div>16</div><div>17</div><div>18</div>
+                <div>19</div><div class="calendar-day has-content">20</div><div>21</div><div>22</div><div class="calendar-day has-content">23</div><div>24</div><div>25</div>
+                <div>26</div><div>27</div><div>28</div><div>29</div><div>30</div><div>31</div><div></div>
+            </div>
+            <p style="margin-top: 10px;">🔵蓝色底色 = 当天有记录 | 点击日期查看详情</p>
+        </div>
+    </div>
+
+    <!-- 打卡记录页 -->
+    <div class="page" id="recordPage">
+        <div class="page-header">
+            <a href="javascript:showPage('homePage')">🔙 返回首页</a>
+            <a href="javascript:showPage('publishPage')">发布日常</a>
+            <a href="javascript:showPage('calendarPage')">日历墙</a>
+            <a href="javascript:showPage('recordPage')">打卡记录</a>
+            <a href="javascript:showPage('backupPage')">备份恢复</a>
+        </div>
+        <h2>🥁 全量打卡记录</h2>
+        <div id="recordList">
+            <!-- 打卡记录会动态生成 -->
+            <div class="record-item">⏰ 2026-03-06 19:20:00  👤 鹅槑精</div>
+            <div class="record-item">⏰ 2026-03-06 19:18:00  👤 Yoinagi</div>
+            <div class="record-item">⏰ 2026-03-05 22:10:00  👤 鹅槑精</div>
+        </div>
+    </div>
+
+    <!-- 备份恢复页 -->
+    <div class="page" id="backupPage">
+        <div class="page-header">
+            <a href="javascript:showPage('homePage')">🔙 返回首页</a>
+            <a href="javascript:showPage('publishPage')">发布日常</a>
+            <a href="javascript:showPage('calendarPage')">日历墙</a>
+            <a href="javascript:showPage('recordPage')">打卡记录</a>
+            <a href="javascript:showPage('backupPage')">备份恢复</a>
+        </div>
+        <h2>💾 数据备份与恢复</h2>
+        <p style="color: red;">🚨 恢复操作会覆盖当前数据 · 请谨慎操作</p>
+        <button class="backup-btn" onclick="backupData()">⬇️ 下载完整备份文件</button>
+        <div style="margin-top: 20px;">
+            <input type="file" id="restoreFile" accept=".json">
+            <button class="restore-btn" onclick="restoreData()">⬆️ 开始恢复数据</button>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentUser = "";
+        // 初始化数据
+        let punchRecords = JSON.parse(localStorage.getItem("punchRecords")) || [];
+        let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+        // 登录
+        function login(username) {
+            currentUser = username;
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("homePage").style.display = "block";
+            document.getElementById("greeting").textContent = `Hi ${username}，欢迎回来～`;
+            updatePunchStats();
+        }
+
+        // 显示指定页面
+        function showPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll(".page").forEach(page => page.style.display = "none");
+            document.getElementById("homePage").style.display = "none";
+            // 显示目标页面
+            if (pageId === "homePage") {
+                document.getElementById("homePage").style.display = "block";
+            } else {
+                document.getElementById(pageId).style.display = "block";
+            }
+        }
+
+        // 打卡
+        function punchCard() {
+            const now = new Date();
+            const timeStr = now.toLocaleString("zh-CN", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            }).replace(/\//g, "-");
+            punchRecords.push({
+                user: currentUser,
+                time: timeStr
+            });
+            localStorage.setItem("punchRecords", JSON.stringify(punchRecords));
+            updatePunchStats();
+            alert("打卡成功！");
+        }
+
+        // 更新打卡统计
+        function updatePunchStats() {
+            const emeijing = punchRecords.filter(r => r.user === "鹅槑精").length;
+            const yoinagi = punchRecords.filter(r => r.user === "Yoinagi").length;
+            const total = emeijing + yoinagi;
+            document.getElementById("emeijingCount").textContent = emeijing;
+            document.getElementById("yoinagiCount").textContent = yoinagi;
+            document.getElementById("totalCount").textContent = total;
+            // 更新打卡记录列表
+            renderPunchRecords();
+        }
+
+        // 渲染打卡记录
+        function renderPunchRecords() {
+            const recordList = document.getElementById("recordList");
+            recordList.innerHTML = "";
+            // 按时间倒序
+            const sortedRecords = [...punchRecords].sort((a, b) => new Date(b.time) - new Date(a.time));
+            sortedRecords.forEach(record => {
+                const item = document.createElement("div");
+                item.className = "record-item";
+                item.textContent = `⏰ ${record.time}  👤 ${record.user}`;
+                recordList.appendChild(item);
+            });
+        }
+
+        // 发布日常
+        function publishNote() {
+            const title = document.getElementById("noteTitle").value;
+            const author = document.getElementById("noteAuthor").value;
+            const content = document.getElementById("noteContent").value;
+            const images = document.getElementById("noteImages").files;
+            
+            const note = {
+                title,
+                author,
+                content,
+                time: new Date().toLocaleString(),
+                images: Array.from(images).map(file => URL.createObjectURL(file))
+            };
+            notes.push(note);
+            localStorage.setItem("notes", JSON.stringify(notes));
+            
+            alert("发布成功！");
+            // 清空表单
+            document.getElementById("noteTitle").value = "";
+            document.getElementById("noteContent").value = "";
+            document.getElementById("noteImages").value = "";
+        }
+
+        // 备份数据
+        function backupData() {
+            const data = {
+                punchRecords,
+                notes
+            };
+            const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `emeijing-yoinagi-diary-backup-${new Date().getTime()}.json`;
+            a.click();
+        }
+
+        // 恢复数据
+        function restoreData() {
+            const file = document.getElementById("restoreFile").files[0];
+            if (!file) {
+                alert("请选择备份文件！");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = JSON.parse(e.target.result);
+                punchRecords = data.punchRecords || [];
+                notes = data.notes || [];
+                localStorage.setItem("punchRecords", JSON.stringify(punchRecords));
+                localStorage.setItem("notes", JSON.stringify(notes));
+                updatePunchStats();
+                alert("恢复成功！");
+            };
+            reader.readAsText(file);
+        }
+
+        // 初始化打卡记录
+        renderPunchRecords();
+    </script>
+</body>
+</html>
